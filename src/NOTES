@@ -1,0 +1,37 @@
+componentDidMount() {
+    const cartJSON = localStorage.getItem('cart');
+    const cart = JSON.parse(cartJSON);
+    this.setState({
+        items: ['shoes', 'sandals', 'hat', 'sunglasses']
+        cart: cart || [] //so that when the cart isn't there it doesn't give an error
+    })
+}
+    
+
+addToCart = (item)
+
+
+
+stringify to serialize date (turn it into a string)
+
+parse it to deserialize and re-use the data again
+
+application tab in inspect has local localStorage
+
+use localStorage.setItem('cart', JSON.stringify(cart))
+)
+
+to clarify: localStorage.setItem('your-item', JSON.stringify(your-item)
+
+GET ITEM 
+
+localstorage.getItem(key)
+
+if from some service you use, you would use:
+yourservice.shoppingItems()  where "yourservice" is the name of the service
+
+
+TO STUDY
+callbacks
+& 
+promises (.then & .catch)
