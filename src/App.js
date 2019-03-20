@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-import AddToCart from './Components/AddToCart'
+import AddToCartButton from './Components/AddToCart'
+import { getCart, addItemToCart, removeItemFromCart } from './Components/Cart'
+import {getItems} from './Components/GetItems'
 
 
 class App extends Component {
@@ -51,12 +53,6 @@ class App extends Component {
     alert(`Are you sure you're ready to check out?`)
   }
 
-  getItems = async() => {
-    const response = await fetch("https://mysterious-savannah-64434.herokuapp.com/items")
-    return response.json();
-  }
-
-
   async componentDidMount() {
     // const cartJSON = localStorage.getItem('cartItems');
     // const cart = JSON.parse(cartJSON);
@@ -64,27 +60,57 @@ class App extends Component {
     //     inventory: [...this.state.inventory],
     //     cartItems: cart || [] 
     // })
-   const items = await this.getItems();
-   const cartJSON = localStorage.getItem('cartItems');
-   const cart = JSON.parse(cartJSON);
+   const items = await getItems();
+   const cart = await getCart();
    this.setState({
      inventory: items,
      cartItems: cart || []
    })    
 }
 
-  addToCart =  (item) => () => {
-    const cart = [...this.state.cartItems, item];
-    localStorage.setItem('cartItems', JSON.stringify(cart));
-    this.setState({
-      cartItems: [...this.state.cartItems, item]})
-    }
+  // async componentDidMount() {
+  //   const items = await getItems();
+  //   items = stuff => 
+  //     this.setState({
+  //       inventory: stuff
+  //     })
+    
+  //   const cart = getCart()
+  //   cart.then(cart =>
+  //     this.setState({
+  //       cartItems: cart || []
+  //     }))
+    
+  // }
 
-  removeItem = (index) => () => {
-    this.state.cartItems.splice(index, 1);
-    localStorage.setItem('cartItems', JSON.stringify(this.state.cart));
-    this.setState({cartItems: this.state.cartItems})
-    }
+  // async addToCart(item) {
+  //   await fetch("https://unico.herokuapp.com/api/cart", {
+  //     method: "POST",
+  //     headers: {'Content-Type': "application/json",
+  //   body: JSON.stringify(item)}
+  //   })
+   
+    
+  // }
+
+  addToCart = (item) => () => {
+    addItemToCart(item)
+    .then(cart=>
+      this.setState({
+      cartItems: cart
+      })) 
+    
+  }
+
+  removeItem = (item) => () => {
+    removeItemFromCart(item.id)
+    .then(cart =>
+      this.setState({
+        cartItems: cart
+      }))
+  }
+
+
 
   render() {
     return (
@@ -113,7 +139,7 @@ class App extends Component {
               alignItems: 'center',
               justifyItems: 'center'
               }}>
-              <li >{item.name.toUpperCase()}</li>
+              <li >{item.name}</li>
               <img style = {{
                 width: 120
                 }} 
@@ -121,7 +147,7 @@ class App extends Component {
               />
               
               <p>Price = ${item.price}</p>
-              <AddToCart style = {{
+              <AddToCartButton style = {{
                 color: '#07AAFF', 
                 backgroundColor: '#282c34',
                 height: 25,
@@ -148,7 +174,7 @@ class App extends Component {
               listStyle: 'none',
               paddingLeft: 0
             }}>
-           {this.state.cartItems.map((item, index)=> (
+           {this.state.cartItems.map((item, id)=> (
                 <div style={{
                   display: 'flex', 
                   justifyContent: 'center',
@@ -161,7 +187,7 @@ class App extends Component {
                   paddingTop: 5,
                   fontSize: 22
                   }}>
-                  {item.name.toUpperCase()} 
+                  {item.name} 
                   </li>
                   <button style = {{
                     color: 'black', 
@@ -172,7 +198,7 @@ class App extends Component {
                     fontWeight: 'bold',
                     cursor: 'pointer'
                   }} 
-                  onClick = {this.removeItem(index)}>X</button>
+                  onClick = {this.removeItem(item)}>X</button>
                 </div>))}
             </ul>
             <h3>You have {this.state.cartItems.length} items in your cart.</h3>
