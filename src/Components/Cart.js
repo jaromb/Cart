@@ -1,6 +1,6 @@
 
 export const getCart = () => new Promise((resolve, reject) => {
-    fetch("https://mysterious-savannah-64434.herokuapp.com/cart")
+    fetch("http://localhost:5000/cart")
     .then(cart => {
         resolve(cart.json())
     }).catch(reject)
@@ -8,7 +8,7 @@ export const getCart = () => new Promise((resolve, reject) => {
 }) 
 
 export const addItemToCart = (item) => new Promise((resolve,reject) => {
-    fetch("https://mysterious-savannah-64434.herokuapp.com/cart", {
+    fetch("http://localhost:5000/cart", {
         method: "POST",
         headers: {"content-Type": "application/json"},
         body: JSON.stringify(item)
@@ -20,7 +20,7 @@ export const addItemToCart = (item) => new Promise((resolve,reject) => {
 
 export const removeItemFromCart = (id) => new Promise((resolve,reject) => {
     console.log(id)
-    fetch(`https://mysterious-savannah-64434.herokuapp.com/cart/${id}`, {
+    fetch(`http://localhost:5000/cart/${id}`, {
         method: "DELETE"
     })
     .then(cart => {
