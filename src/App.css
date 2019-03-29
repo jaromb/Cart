@@ -31,3 +31,17 @@
     transform: rotate(360deg);
   }
 }
+
+a:link {
+  color: #07AAFF
+}
+
+a:visited {
+  color: #07AAFF
+}
+
+a:hover {
+  color: purple
+}
+
+
