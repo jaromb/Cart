@@ -24,13 +24,13 @@ class App extends Component {
             <nav className = 'App-header' style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around', height: 120}}>
             <h1 style = {{fontSize: 50, fontWeight: 'bold'}}><Link style ={{textDecoration: 'none'}} to="/home">Stuff to Eat</Link></h1>
               <ul style={{listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', flexWrap: 'wrap', justifyContent: 'center', color: '#07AAFF', fontSize: 18}}>
-                <li><Link style ={{textDecoration: 'none'}} to="/home">Home</Link></li>
+                <li><Link style ={{textDecoration: 'none'}} to="/">Home</Link></li>
                 <li><Link style ={{textDecoration: 'none'}} to="/user">Customer</Link></li>
                 <li><Link style = {{textDecoration: 'none'}} to="/admin/login">Admin</Link></li>
               </ul>
             </nav>   
             <Switch>
-              <Route path="/home" component={Home}/> 
+              <Route path="/" exact component={Home}/> 
               {/* Note the use of 'exact' below */}
               <Route path="/user" exact component={User}/>
               <Route path="/user/storefront" exact component={Storefront}/>
