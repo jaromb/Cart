@@ -9,4 +9,14 @@ export const getItems = async() => {
   }
 
 
+export const getUsers = async() => {
+    try {
+      const response = await fetch("http://localhost:5000/users")
+      return response.json();
+  }
+    catch(error) {
+      console.error(error)
+    }
+  }
+
  

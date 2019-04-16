@@ -33,6 +33,25 @@ class InventoryList extends Component {
             }))
     }
 
+    modifyInventoryItem = (id) => new Promise((resolve,reject) => {
+        fetch(`http://localhost:5000/items/${id}`, {
+            method: "POST",
+            body: {}
+        })
+        .then(inventory => {
+            resolve(inventory.json())
+        }).catch(reject)
+    })
+    
+    modifyInventory = (item) => () => {
+        console.log('clicked');
+        this.modyInventoryItem(item.id)
+        .then(inventory =>
+            this.setState({
+                inventory: inventory
+            }))
+    }
+
     changeNameFieldValue = (event) => {
         if (event) {
         this.setState({
@@ -64,14 +83,25 @@ class InventoryList extends Component {
                         <input class='inventory' value = {item.price} style = {{width: 80, fontSize: 16, height: 20, paddingTop: 5}}></input>
                     </div>    
                     <button style = {{
-                    color: '#07AAFF', 
-                    backgroundColor: '#282c34',
-                    height: 25,
-                    width: 80,
-                    fontWeight: 'bold',
-                    cursor: 'pointer',
-                    alignSelf: 'center',
-                    marginRight: 5}} onClick={this.removeFromInventory(item)}>Remove</button>
+                        color: '#07AAFF', 
+                        backgroundColor: '#282c34',
+                        height: 25,
+                        width: 80,
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                        alignSelf: 'center',
+                        marginRight: 5}} 
+                        onClick={this.modifyInventory(item)}>Modify</button>
+                    <button style = {{
+                        color: '#07AAFF', 
+                        backgroundColor: '#282c34',
+                        height: 25,
+                        width: 80,
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                        alignSelf: 'center',
+                        marginRight: 5}} 
+                        onClick={this.removeFromInventory(item)}>Remove</button>
                 </li>
                 </div>
                 ))}

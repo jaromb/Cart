@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import '/Users/jarombridges/Helio/Cart/cart/src/App.css'
 import AddToCartButton from '../Components/AddToCart'
-import { getCart, addItemToCart, removeItemFromCart } from '../Components/Cart'
+import { getCart, addItemToCart, removeItemFromCart, updateItemInCart } from '../Components/Cart'
 import {getItems} from '../Components/GetItems'
+
 
 
 class Storefront extends Component {
   state = {
     inventory: [],
-    cartItems: []
+    cartItems: [],
+    updateItem: {},
+    subtotal: '',
+    tax:'.067'
   }
 
 
@@ -21,25 +25,107 @@ class Storefront extends Component {
    const cart = await getCart();
    this.setState({
      inventory: items,
-     cartItems: cart || []
+     cartItems: cart || [],
+     subtotal: this.calculateSubtotal()
    })    
+
 }
 
+  calculateSubtotal = (cart) => {
+    let sum = 0
+    for(let i=0; i<this.state.cartItems.length; i++) {
+        sum += this.state.cartItems[i].price * this.state.cartItems[i].quantity
+    }
+    return sum.toFixed(2)
+  }
+
+  subtotal = this.calculateSubtotal(this.state.cartItems)
+  
   addToCart = (item) => () => {
     addItemToCart(item)
-    .then(cart=>
+    .then(cart =>
       this.setState({
       cartItems: cart
       })) 
     
   }
 
+  updateCartItem = (item) => () => {
+    updateItemInCart(item)
+    .then(cart => 
+      this.setState({
+        cartItems: cart
+      }))
+  }
+
+  handleAddClick = (item) => () => {
+    if (this.state.cartItems.find(cartItem=> cartItem._id === item._id) === undefined) {
+        console.log('add item')
+        let addedItem = item
+        addedItem.quantity = 1
+        addItemToCart(addedItem)
+        .then(cart=>
+          this.setState({
+            cartItems: cart
+          }))
+    }
+    else {
+      let cartCopy = this.state.cartItems
+      for (let i=0; i<cartCopy.length; i++) {
+        if (cartCopy[i]._id === item._id) {
+          cartCopy[i].quantity+=1
+          this.setState({
+            updateItem: cartCopy[i]
+          })
+        }
+        this.setState({
+          cartItems: cartCopy
+        })
+      }
+       updateItemInCart(this.state.updateItem)
+       .then(cart=>
+        this.setState({
+          cartItems: cart
+        }))
+    }
+      
+  }
+
   removeItem = (item) => () => {
-    removeItemFromCart(item.id)
+    removeItemFromCart(item._id)
     .then(cart =>
       this.setState({
         cartItems: cart
       }))
+  }
+
+  handleDeleteClick = (item) => () => {
+    if(item.quantity === 1) {
+      removeItemFromCart(item._id)
+    .then(cart =>
+      this.setState({
+        cartItems: cart
+      }))
+    }
+    else {
+      let cartCopy = this.state.cartItems
+      for (let i=0; i<cartCopy.length; i++) {
+        if (cartCopy[i]._id === item._id) {
+          cartCopy[i].quantity-=1
+          this.setState({
+            updateItem: cartCopy[i]
+          })
+        }
+        this.setState({
+          cartItems: cartCopy
+        })
+      }
+       updateItemInCart(this.state.updateItem)
+       .then(cart=>
+        this.setState({
+          cartItems: cart
+        }))
+    }
   }
 
  
@@ -48,7 +134,11 @@ class Storefront extends Component {
     return (
       <div className="App">
         <section style = {{display: 'flex'}}>
-          <div style = {{float: 'left', height: '90vh'}}>
+          <div style = {{float: 'left', borderRight: '3px solid gray'}}>
+          <h2 style = {{
+              textDecoration: 'underline', 
+              fontSize: 34}}
+            >Store Inventory</h2>
             <ul style = {{
               listStyle: 'none', 
               padding: 0,
@@ -69,11 +159,7 @@ class Storefront extends Component {
               justifyItems: 'center'
               }}>
               <li >{item.name} </li>
-              <img style = {{
-                width: 120
-                }} 
-                src={item.image}
-              />              
+              <img style = {{width: 120}} src={item.image} alt=''/>              
               <p>Price = ${item.price}</p>
               <AddToCartButton style = {{
                 color: '#07AAFF', 
@@ -82,22 +168,18 @@ class Storefront extends Component {
                 width: 140,
                 fontWeight: 'bold',
                 cursor: 'pointer'}} 
-                onClick = {this.addToCart(item)}  
+                onClick = {this.handleAddClick(item)}  
               />   
             </div>
             ))}
             </ul>
           </div>  
+         
+             {/*-------------THIS IS THE CART -------------------  */}
           <div style= {{
             float: 'right',
-            width: '40em',
-            height: 'auto',
-            borderLeft: '2px solid gray',
+            width: '40em'
             }}> 
-
-            
-    {/*-------------THIS IS THE CART -------------------  */}
-          
             <h2 style = {{
               textDecoration: 'underline', 
               fontSize: 34}}
@@ -106,7 +188,7 @@ class Storefront extends Component {
               listStyle: 'none',
               paddingLeft: 0
             }}>
-           {this.state.cartItems.map((item, id)=> (
+           {this.state.cartItems.map((item, _id)=> (
                 <div style={{
                   display: 'flex', 
                   justifyContent: 'center',
@@ -134,10 +216,13 @@ class Storefront extends Component {
                     fontWeight: 'bold',
                     cursor: 'pointer'
                   }} 
-                  onClick = {this.removeItem(item)}>X</button>
+                  onClick = {this.handleDeleteClick(item)}>X</button>
                 </div>))}
             </ul>
             <h3>You have {this.state.cartItems.length} items in your cart.</h3>
+            <h4 style={{lineHeight: .2}}>Subtotal: ${this.calculateSubtotal(this.state.cartItems)}</h4>
+            <h4 style={{lineHeight: .2}}>Taxes: ${(this.state.tax * this.calculateSubtotal(this.state.cartItems)).toFixed(2)}</h4>
+            <h3 style={{lineHeight: .2}}>Total: ${(Number(this.calculateSubtotal(this.state.cartItems)) + Number((this.state.tax * this.calculateSubtotal(this.state.cartItems)).toFixed(2))).toFixed(2)}</h3>
             <button 
             style = {{backgroundColor: 'gold',
             border: '2px solid black',

@@ -35,3 +35,22 @@ TO STUDY
 callbacks
 & 
 promises (.then & .catch)
+&
+async await
+
+
+requesting data from another source:
+
+export const getItems = async () => {
+    const response = await fetch("url")
+    return response.json()  // this (".json") does the parsing for you
+}
+
+March 13
+
+Fetch 
+
+https://mysterious-savannah-64434.herokuapp.com/items   
+
+"/items" is the path that we go into from the URL we're given to get the data that we want
+    could also be items/somethingelse (if I want to get a specific item in that dataset)
