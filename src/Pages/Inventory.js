@@ -42,7 +42,7 @@ class Inventory extends Component {
     image: this.state.url}
 
     if(this.state.name !== '' && this.state.price !== '' && this.state.url !== '') {
-    fetch("http://localhost:5000/items", {
+    fetch("https://my-helio-cart-api.herokuapp.com/items", {
         method: "POST",
         headers: {"content-Type": "application/json"},
         body: JSON.stringify(newObject)
@@ -103,7 +103,7 @@ modifyInventoryItem = () => new Promise((resolve,reject) => {
         price: this.state.updatedPrice,
         image: this.state.updatedURL,
         _id: this.state.updateID}
-    fetch(`http://localhost:5000/items`, {
+    fetch(`https://my-helio-cart-api.herokuapp.com/items`, {
         method: "POST",
         headers: {"content-Type": "application/json"},
         body: JSON.stringify(modifiedObject)
@@ -123,7 +123,7 @@ modifyInventory = () => () => {
 }
 
 removeItemFromInventory = (_id) => new Promise((resolve,reject) => {
-    fetch(`http://localhost:5000/items/${_id}`, {
+    fetch(`https://my-helio-cart-api.herokuapp.com/items/${_id}`, {
         method: "DELETE"
     })
     .then(inventory => {

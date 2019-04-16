@@ -15,7 +15,7 @@ class AddUser extends Component {
         password: this.state.newPassword}
     
         if(this.state.newUser !== '' && this.state.newEmail !== '' && this.state.newPassword !== '') {
-        fetch("http://localhost:5000/users", {
+        fetch("https://my-helio-cart-api.herokuapp.com/users", {
             method: "POST",
             headers: {"content-Type": "application/json"},
             body: JSON.stringify(newObject)

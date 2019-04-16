@@ -21,7 +21,7 @@ class UserLogin extends Component {
       userInfo = {username: this.state.user, password: this.state.password}
 
     authenticate = (info) => new Promise((resolve,reject) => {
-        fetch("http://localhost:5000/login", {
+        fetch("https://my-helio-cart-api.herokuapp.com/login", {
             method: "POST",
             headers: {"content-Type": "application/json"},
             body: JSON.stringify(info)
