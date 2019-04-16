@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import '/Users/jarombridges/Helio/Cart/cart/src/App.css'
 import AddToCartButton from '../Components/AddToCart'
 import { getCart, addItemToCart, removeItemFromCart, updateItemInCart } from '../Components/Cart'
 import {getItems} from '../Components/GetItems'
