@@ -38,6 +38,16 @@ class AddUser extends Component {
 
     }
 
+    handleChange = (event) => {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+    
+        this.setState({
+          [name]: value
+        })
+      }
+
     render() {
         return (
             <div>
