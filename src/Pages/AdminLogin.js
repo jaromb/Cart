@@ -19,8 +19,6 @@ class AdminLogin extends Component {
         })
       }
 
-    //   userInfo = {username: this.state.user, password: this.state.password}
-
     authenticate = (user, password) => new Promise((resolve,reject) => {
         console.log('user = ' + user + ' password=' + password)
         fetch("https://my-helio-cart-api.herokuapp.com/admin/login", {
@@ -29,13 +27,17 @@ class AdminLogin extends Component {
             credentials: "include",
             body: JSON.stringify({username: user, password: password})
         })
-        .then(response=> 
-            console.log(response)
-        )
+        .then(response => {
+            resolve(response)
+        }).catch(reject)  
     })  
 
     authenticateUser = () => () => {
-        this.authenticate(this.state.user, this.state.password);
+        this.authenticate(this.state.user, this.state.password)
+            .then(response => this.setState({
+                returnedUser: response
+            }))
+        
     }  
 
     
@@ -60,7 +62,6 @@ class AdminLogin extends Component {
                             cursor: 'pointer',
                             alignSelf: 'center'}} onClick={this.authenticateUser(this.state.user, this.state.password)}>Sign in</button>
                     </form>
-                    
                 </div>
             </div>
             
