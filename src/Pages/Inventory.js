@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import '/Users/jarombridges/Helio/Cart/cart/src/App.css'
 import {getItems} from '../Components/GetItems'
-import {Link} from 'react-router-dom'
+import {Link, Redirect} from 'react-router-dom'
 
 class Inventory extends Component {
   state = {
@@ -14,16 +14,24 @@ class Inventory extends Component {
     updatedPrice: '',
     updatedURL: '',
     updateID: '',
-    modifyButtonClicked: false
+    modifyButtonClicked: false,
+    error: null
+    // user: null
   }
 
   async componentDidMount() {
+    try {
     const items = await getItems();
     this.setState({
-      inventory: items
-    })    
-
-    
+        // user: sessionStorage.getItem('user'),
+        inventory: items || []
+    })
+    } 
+    catch {
+        this.setState({
+            error: 'user not authorized'
+        })
+    }
  }
 
   handleChange = (event) => {
@@ -42,8 +50,9 @@ class Inventory extends Component {
     image: this.state.url}
 
     if(this.state.name !== '' && this.state.price !== '' && this.state.url !== '') {
-    fetch("https://my-helio-cart-api.herokuapp.com/items", {
+    fetch("https://my-helio-cart-api.herokuapp.com//items", {
         method: "POST",
+        credentials: 'include',
         headers: {"content-Type": "application/json"},
         body: JSON.stringify(newObject)
     })
@@ -103,8 +112,9 @@ modifyInventoryItem = () => new Promise((resolve,reject) => {
         price: this.state.updatedPrice,
         image: this.state.updatedURL,
         _id: this.state.updateID}
-    fetch(`https://my-helio-cart-api.herokuapp.com/items`, {
+    fetch(`https://my-helio-cart-api.herokuapp.com//items`, {
         method: "POST",
+        credentials: 'include',
         headers: {"content-Type": "application/json"},
         body: JSON.stringify(modifiedObject)
     })
@@ -123,8 +133,9 @@ modifyInventory = () => () => {
 }
 
 removeItemFromInventory = (_id) => new Promise((resolve,reject) => {
-    fetch(`https://my-helio-cart-api.herokuapp.com/items/${_id}`, {
-        method: "DELETE"
+    fetch(`https://my-helio-cart-api.herokuapp.com//items/${_id}`, {
+        method: "DELETE",
+        credentials: 'include'
     })
     .then(inventory => {
         resolve(inventory.json())
@@ -143,9 +154,15 @@ removeFromInventory = (item) => () => {
 
 
   render() {
-    return (
+      return this.state.error ?
+      <div>
+        <p style={{color: 'red', fontSize: 30}}>USER NOT AUTHORIZED</p>
+        <Link style={{fontSize: 20, textDecoration: 'none'}} exact to='/admin/login'>Go to admin login page</Link>
+      </div>
+      :
+        
         <div style={{marginTop: 10}}>
-        <Link style={{textDecoration: 'none', fontSize: 20}} to='/admin/userManagement' exact>Go to User Management</Link>
+        <Link style={{textDecoration: 'none', fontSize: 20}} to='/admin/userManagement'>Go to User Management</Link>
       <div style={{display: 'flex', justifyContent: 'space-around'}}>
           <div>
            {this.state.modifyButtonClicked === false ? 
@@ -156,7 +173,7 @@ removeFromInventory = (item) => () => {
             <h1>Add Item to Inventory</h1>
             <form style={{display: 'flex', flexDirection: 'column'}}>
               <label style={{height: 40}}>Item name: <input name='name' value={this.state.name} placeholder='e.g. Turkey' ref='name' type='text' onChange={this.handleChange}></input></label>
-              <label style={{height: 40}}>Item price: <input name='price' value={this.state.price} maxlength= '4' type='number' placeholder='00.00' ref='price' onChange={this.handleChange}></input></label>
+              <label style={{height: 40}}>Item price: <input name='price' value={this.state.price} maxLength= '4' type='number' placeholder='00.00' ref='price' onChange={this.handleChange}></input></label>
               <label style={{height: 40}}>Image url: <input name='url' value={this.state.url} ref='url' type='url' placeholder='http://yourimage.jpeg' onChange={this.handleChange}></input></label>
               <button style = {{
                 color: '#07AAFF', 
@@ -167,6 +184,7 @@ removeFromInventory = (item) => () => {
                 cursor: 'pointer',
                 alignSelf: 'center'}} onClick={this.addToInventory()}>Add Item</button>
             </form>
+            
            </div>
            :  
                 
@@ -201,7 +219,6 @@ removeFromInventory = (item) => () => {
 
           <div style={{display: 'flex', flexDirection: 'column', flexWrap: 'wrap'}}>
             <h1> Current Inventory</h1>
-            
             <table style={{border: '1px solid gray'}}>
                 <thead  style={{border: '1px solid gray'}}>
                     <tr>
@@ -213,8 +230,7 @@ removeFromInventory = (item) => () => {
                 </thead>
                 <tbody>
             {this.state.inventory.map((item)=> (
-            
-                
+                   
                     <tr>
                         <td style={{border: '1px solid gray'}}>{item.name}</td>
                         <td style={{border: '1px solid gray'}}>${item.price}</td>
@@ -246,11 +262,12 @@ removeFromInventory = (item) => () => {
             ))}
             </tbody>
             </table>
+            
           </div>
           
       </div>
       </div>
-    );
+      
   }
 }
 export default Inventory;

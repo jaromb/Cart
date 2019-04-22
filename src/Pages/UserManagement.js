@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import '/Users/jarombridges/Helio/Cart/cart/src/App.css'
 import {getUsers} from '../Components/GetItems'
-import {Link} from 'react-router-dom'
+import {Link, Redirect} from 'react-router-dom'
 
 class UserManagement extends Component {
   state = {
@@ -14,14 +14,27 @@ class UserManagement extends Component {
     updatedEmail: '',
     updatedPassword: '',
     updateID: '',
-    modifyButtonClicked: false
+    modifyButtonClicked: false,
+    user: null,
+    error: null
   }
 
   async componentDidMount() {
-    const users = await getUsers();
-    this.setState({
-      userList: users
-    })    
+    try{
+        const users = await getUsers();
+       this.setState({
+            user: sessionStorage.getItem('user'),
+            userList: users
+        }) 
+        console.log(this.state.users)
+    }
+    catch {
+        this.setState({
+            error: 'USER NOT AUTHORIZED'
+        })
+        
+    }
+
  }
 
   handleChange = (event) => {
@@ -40,8 +53,9 @@ class UserManagement extends Component {
     password: this.state.password}
 
     if(this.state.name !== '' && this.state.price !== '' && this.state.url !== '') {
-    fetch("https://my-helio-cart-api.herokuapp.com/users", {
+    fetch("https://my-helio-cart-api.herokuapp.com//users", {
         method: "POST",
+        credentials: 'include',
         headers: {"content-Type": "application/json"},
         body: JSON.stringify(newObject)
     })
@@ -100,8 +114,9 @@ modifyUserInfo = () => new Promise((resolve,reject) => {
         email: this.state.updatedEmail,
         password: this.state.updatedPassword,
         _id: this.state.updateID}
-    fetch(`https://my-helio-cart-api.herokuapp.com/users`, {
+    fetch(`https://my-helio-cart-api.herokuapp.com//users`, {
         method: "PUT",
+        credentials: 'include',
         headers: {"content-Type": "application/json"},
         body: JSON.stringify(modifiedObject)
     })
@@ -120,8 +135,9 @@ modifyUser = () => () => {
 }
 
 removeUserFromList = (_id) => new Promise((resolve,reject) => {
-    fetch(`https://my-helio-cart-api.herokuapp.com/users/${_id}`, {
-        method: "DELETE"
+    fetch(`https://my-helio-cart-api.herokuapp.com//users/${_id}`, {
+        method: "DELETE",
+        credentials: 'include'
     })
     .then(users => {
         resolve(users.json())
@@ -140,9 +156,14 @@ removeUser = (user) => () => {
 
 
   render() {
-    return (
+      return this.state.error ?
+        <div>
+            <p style={{color: 'red', fontSize: 30}}>USER NOT AUTHORIZED</p>
+            <Link style={{fontSize: 20, textDecoration: 'none'}} exact to='/admin/login'>Go to admin login page</Link>
+        </div>
+        :
       <div style={{marginTop: 10}}>
-      <Link style={{textDecoration: 'none', fontSize: 20}} to='/admin/inventory' exact>Go to Inventory Management</Link>
+      <Link style={{textDecoration: 'none', fontSize: 20}} to='/admin/inventory'>Go to Inventory Management</Link>
       <div style={{display: 'flex', justifyContent: 'space-around'}}>
           <div>
             
@@ -199,7 +220,11 @@ removeUser = (user) => () => {
 
           <div style={{display: 'flex', flexDirection: 'column', flexWrap: 'wrap'}}>
             <h1>User List</h1>
-            
+
+            {this.state.error!==null ?
+               <p style={{color: 'red'}}>{this.state.error}</p>
+               :
+
             <table style={{border: '1px solid gray'}}>
                 <thead  style={{border: '1px solid gray'}}>
                     <tr>
@@ -209,6 +234,9 @@ removeUser = (user) => () => {
                         <th style={{border: '1px solid gray'}}>Actions</th>
                     </tr>
                 </thead>
+               
+               
+               
                 <tbody>
             {this.state.userList.map((user)=> (
             
@@ -240,15 +268,17 @@ removeUser = (user) => () => {
                                 onClick={this.removeUser(user)}>Remove</button> 
                         </td>
                     </tr>
-                
+            
             ))}
             </tbody>
+               
             </table>
+            }
           </div>
-          
+               
       </div>
+               
       </div>
-    );
   }
 }
 export default UserManagement;

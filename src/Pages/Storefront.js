@@ -219,7 +219,7 @@ class Storefront extends Component {
                 </div>))}
             </ul>
             <h3>You have {this.state.cartItems.length} items in your cart.</h3>
-            <h4 style={{lineHeight: .2}}>Subtotal: ${this.calculateSubtotal(this.state.cartItems)}</h4>
+            <h4 style={{lineHeight: .2, display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'}}>Subtotal: ${this.calculateSubtotal(this.state.cartItems)}</h4>
             <h4 style={{lineHeight: .2}}>Taxes: ${(this.state.tax * this.calculateSubtotal(this.state.cartItems)).toFixed(2)}</h4>
             <h3 style={{lineHeight: .2}}>Total: ${(Number(this.calculateSubtotal(this.state.cartItems)) + Number((this.state.tax * this.calculateSubtotal(this.state.cartItems)).toFixed(2))).toFixed(2)}</h3>
             <button 

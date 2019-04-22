@@ -9,34 +9,66 @@ class AdminLogin extends Component {
         error: null
     }
 
+    async componentDidMount() {
+        const returnedUser = await sessionStorage.getItem('user')
+        this.setState({
+            returnedUser: returnedUser
+        })
+    }
+    
     handleChange = (event) => {
         const target = event.target;
         const value = target.value;
         const name = target.name;
-    
+        
         this.setState({
-          [name]: value
+          [name]: value,
+          error: ''
         })
       }
 
+      handleEnter = () => (e) => {
+        if (e.key === 'Enter') {
+            this.authenticate(this.state.user, this.state.password)
+            .then(response => {
+             
+                sessionStorage.setItem('user', response.result.username)
+                this.setState({
+                returnedUser: response.result.username
+            })   
+        }).catch()
+        }
+      }
+    
+
     authenticate = (user, password) => new Promise((resolve,reject) => {
         console.log('user = ' + user + ' password=' + password)
-        fetch("https://my-helio-cart-api.herokuapp.com/admin/login", {
+        fetch("https://my-helio-cart-api.herokuapp.com//admin/login", {
             method: "POST",
-            headers: {"content-Type": "application/json"},
+            headers: {"content-Type": "application/json" },
             credentials: "include",
             body: JSON.stringify({username: user, password: password})
         })
         .then(response => {
-            resolve(response)
-        }).catch(reject)  
+            if (response.status===200) {
+            resolve(response.json())
+            }
+        }).catch(
+            this.setState({
+                error: 'User and/or password is incorrect'
+            })   
+            )  
     })  
 
     authenticateUser = () => () => {
         this.authenticate(this.state.user, this.state.password)
-            .then(response => this.setState({
-                returnedUser: response
-            }))
+            .then(response => {
+             
+                sessionStorage.setItem('user', response.result.username)
+                this.setState({
+                returnedUser: response.result.username
+            })   
+        }).catch()
         
     }  
 
@@ -50,9 +82,11 @@ class AdminLogin extends Component {
                 <div>
                     <h2 style={{fontSize: 40}}>Admin Login</h2>
                     <form style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-                        <label style={{display: 'flex', flexDirection: 'row', alignSelf:'center', fontSize: 20}}>Email/Username: <input name='user' value={this.state.user} style={{height: 20, width: 200}} onChange={this.handleChange}></input></label>
-                        <label style={{display: 'flex', flexDirection: 'row', alignSelf:'center', fontSize: 20}}>Password: <input name='password' type='password' value={this.state.password} style={{height: 20, width: 200}} onChange={this.handleChange}></input></label>
-                        <button style = {{
+                        <label style={{display: 'flex', flexDirection: 'row', alignSelf:'center', fontSize: 20}}>Email/Username: <input name='user' value={this.state.user} style={{height: 20, width: 200}} onChange={this.handleChange} onKeyDown={this.handleEnter(this.state.user, this.state.password)}></input></label>
+                        <label style={{display: 'flex', flexDirection: 'row', alignSelf:'center', fontSize: 20}}>Password: <input name='password' type='password' value={this.state.password} style={{height: 20, width: 200}} onChange={this.handleChange} onKeyDown={this.handleEnter(this.state.user, this.state.password)}></input></label>
+                        
+                    </form>
+                    <button style = {{
                             color: '#07AAFF', 
                             marginTop: 10,
                             backgroundColor: '#282c34',
@@ -61,8 +95,12 @@ class AdminLogin extends Component {
                             fontWeight: 'bold',
                             cursor: 'pointer',
                             alignSelf: 'center'}} onClick={this.authenticateUser(this.state.user, this.state.password)}>Sign in</button>
-                    </form>
                 </div>
+               {this.state.error? 
+                <p style={{color: 'red'}}>{this.state.error}</p>
+               :
+               <p></p>
+               }
             </div>
             
         

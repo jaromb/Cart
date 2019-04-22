@@ -23,6 +23,7 @@ class UserLogin extends Component {
     authenticate = (info) => new Promise((resolve,reject) => {
         fetch("https://my-helio-cart-api.herokuapp.com/login", {
             method: "POST",
+            credentials: 'include',
             headers: {"content-Type": "application/json"},
             body: JSON.stringify(info)
         })
