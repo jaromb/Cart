@@ -1,6 +1,6 @@
 
 export const getCart = () => new Promise((resolve, reject) => {
-    fetch("https://my-helio-cart-api.herokuapp.com/cart")
+    fetch("herokuapp.com/cart")
     .then(cart => {
         resolve(cart.json())
     }).catch(reject)

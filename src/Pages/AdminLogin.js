@@ -43,7 +43,7 @@ class AdminLogin extends Component {
 
     authenticate = (user, password) => new Promise((resolve,reject) => {
         console.log('user = ' + user + ' password=' + password)
-        fetch("https://my-helio-cart-api.herokuapp.com//admin/login", {
+        fetch("https://my-helio-cart-api.herokuapp.com/admin/login", {
             method: "POST",
             headers: {"content-Type": "application/json" },
             credentials: "include",
