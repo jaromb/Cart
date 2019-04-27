@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import AddToCartButton from '../Components/AddToCart'
 import { getCart, addItemToCart, removeItemFromCart, updateItemInCart } from '../Components/Cart'
 import {getItems} from '../Components/GetItems'
+import {clearCookies} from '../Components/Logout'
 
 
 
@@ -11,7 +12,8 @@ class Storefront extends Component {
     cartItems: [],
     updateItem: {},
     subtotal: '',
-    tax:'.067'
+    tax:'.067',
+    user: 'guest'
   }
 
 
@@ -22,10 +24,12 @@ class Storefront extends Component {
   async componentDidMount() {
    const items = await getItems();
    const cart = await getCart();
+   const user = sessionStorage.getItem('user')
    this.setState({
      inventory: items,
      cartItems: cart || [],
-     subtotal: this.calculateSubtotal()
+     subtotal: this.calculateSubtotal(),
+     user: user
    })    
 
 }
@@ -58,8 +62,14 @@ class Storefront extends Component {
   }
 
   handleAddClick = (item) => () => {
-    if (this.state.cartItems.find(cartItem=> cartItem._id === item._id) === undefined) {
+    if (this.state.cartItems.find(cartItem=> cartItem.itemID === item._id  && cartItem.user === this.state.user) === undefined) {
         console.log('add item')
+        // console.log("cart ID=  " + cartItem.itemID)
+        // console.log('item ID= ' + item._id)
+        // console.log('user in state= ' + this.state.user)
+        // console.log('cart user= ' + cartItem.user)
+        console.log('state user= ' + this.state.user)
+        console.log('item ID= ' + item._id)
         let addedItem = item
         addedItem.quantity = 1
         addItemToCart(addedItem)
@@ -71,7 +81,12 @@ class Storefront extends Component {
     else {
       let cartCopy = this.state.cartItems
       for (let i=0; i<cartCopy.length; i++) {
-        if (cartCopy[i]._id === item._id) {
+        console.log("cart ID=  " + cartCopy[i].itemID)
+        console.log('item ID= ' + item._id)
+        console.log('user in state= ' + this.state.user)
+        console.log('cart user= ' + cartCopy[i].user)
+
+        if (cartCopy[i].itemID === item._id && this.state.user === cartCopy[i].user) {
           cartCopy[i].quantity+=1
           this.setState({
             updateItem: cartCopy[i]
@@ -126,6 +141,8 @@ class Storefront extends Component {
         }))
     }
   }
+
+  
 
  
 
