@@ -2,7 +2,7 @@
 
 export const getItems = async() => {
     try {
-      const response = await fetch("http://localhost:4000/items",
+      const response = await fetch("https://my-helio-cart-api.herokuapp.com/items",
       {
         credentials: 'include'
       })
@@ -16,7 +16,7 @@ export const getItems = async() => {
 
 export const getUsers = async() => {
     try{
-      const response = await fetch("http://localhost:4000/users", 
+      const response = await fetch("https://my-helio-cart-api.herokuapp.com/users", 
       {
         credentials: 'include'
       })

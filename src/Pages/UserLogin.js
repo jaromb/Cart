@@ -44,7 +44,7 @@ class UserLogin extends Component {
 
       authenticate = (user, password) => new Promise((resolve,reject) => {
         console.log('user = ' + user + ' password =' + password)
-        fetch("http://localhost:4000/user/login", {
+        fetch("https://my-helio-cart-api.herokuapp.com/user/login", {
             method: "POST",
             headers: {"content-Type": "application/json" },
             credentials: "include",

@@ -1,6 +1,6 @@
 
 export const clearCookies = () => new Promise((resolve, reject) => {
-    fetch("http://localhost:4000/user/logout", {
+    fetch("https://my-helio-cart-api.herokuapp.com/user/logout", {
     headers: {"content-Type": "application/json"},    
     credentials: 'include'
     })
