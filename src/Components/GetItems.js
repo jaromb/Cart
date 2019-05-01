@@ -1,9 +1,8 @@
-import {Redirect} from 'react-router-dom';
-import React from 'react'
+
 
 export const getItems = async() => {
     try {
-      const response = await fetch("https://my-helio-cart-api.herokuapp.com/items",
+      const response = await fetch("http://localhost:4000/items",
       {
         credentials: 'include'
       })
@@ -17,7 +16,7 @@ export const getItems = async() => {
 
 export const getUsers = async() => {
     try{
-      const response = await fetch("https://my-helio-cart-api.herokuapp.com/users", 
+      const response = await fetch("http://localhost:4000/users", 
       {
         credentials: 'include'
       })

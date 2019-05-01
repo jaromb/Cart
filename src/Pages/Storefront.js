@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import AddToCartButton from '../Components/AddToCart'
 import { getCart, addItemToCart, removeItemFromCart, updateItemInCart } from '../Components/Cart'
 import {getItems} from '../Components/GetItems'
-import {clearCookies} from '../Components/Logout'
-
 
 
 class Storefront extends Component {
@@ -13,7 +11,7 @@ class Storefront extends Component {
     updateItem: {},
     subtotal: '',
     tax:'.067',
-    user: 'guest'
+    user: "guest"
   }
 
 
@@ -29,7 +27,7 @@ class Storefront extends Component {
      inventory: items,
      cartItems: cart || [],
      subtotal: this.calculateSubtotal(),
-     user: user
+     user: user || "guest"
    })    
 
 }
@@ -148,7 +146,7 @@ class Storefront extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div>
         <section style = {{display: 'flex'}}>
           <div style = {{float: 'left', borderRight: '3px solid gray'}}>
           <h2 style = {{

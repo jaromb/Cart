@@ -1,47 +1,69 @@
 import React, {Component} from 'react';
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 
 
 class AddUser extends Component {
     state = {
         newUser: '',
         newEmail: '',
-        newPassword: ''
+        newPassword: '',
+        error: null,
+        addedUser: null
     }
+
+    handleChange = (event) => {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+    
+        this.setState({
+          [name]: value,
+          error: null
+        })
+      }
 
     addNewUser = () => new Promise((resolve,reject) => {
         const newObject = {username: this.state.newUser,
         email: this.state.newEmail,
         password: this.state.newPassword}
     
-        if(this.state.newUser !== '' && this.state.newEmail !== '' && this.state.newPassword !== '') {
-        fetch("https://my-helio-cart-api.herokuapp.com/users", {
+        if (this.state.newUser !== '' && this.state.newEmail !== '' && this.state.newPassword !== '') {
+        fetch("http://localhost:4000/users", {
             method: "POST",
             headers: {"content-Type": "application/json"},
-            body: JSON.stringify(newObject)
+            body: JSON.stringify(newObject),
+            credentials: 'include'
         })
-        .catch(reject)
+        .then(result => 
+                resolve(result.json())
+        ).catch(reject)
     }
         else {
             alert('Did you complete all information fields?')
         }
     })
 
+
     addUser = () => () => {
         this.addNewUser()
-        .then(this.setState({
-            createTextClicked: false
+        .then(result => this.setState({
+            addedUser: result,
+            error: null
+        })
+        )
+        .catch(
+            this.setState({
+            error: 'Username already taken.  Please enter a new username.'
         }))
-    }
-
-    loadLogin = () => () => {
-
+    
     }
 
     
 
     render() {
-        return (
+        return this.state.addedUser ?
+            <Redirect to='/user/login' />
+            :
             <div>
                 <h2 style={{fontSize: 40}}>Create New Account</h2>
                     <form style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
@@ -56,12 +78,13 @@ class AddUser extends Component {
                             fontWeight: 'bold',
                             marginTop: 10,
                             cursor: 'pointer',
-                            alignSelf: 'center'}} onClick={this.addUser()}>Create my account</button>
+                            alignSelf: 'center'}} onClick={this.addUser()} type="button">Create my account</button>
                     </form>
+                    <p style={{color: "red"}}>{this.state.error}</p>
                     <p>Already have an account?</p>
                     <Link style={{textDecoration: 'none', fontWeight: 'bold', color: '#07AAFF', cursor: 'pointer'}} to='/user/login'>Sign in here</Link>
             </div>
-        )
+        
     }
 }
 

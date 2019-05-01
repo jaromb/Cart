@@ -44,7 +44,7 @@ class UserLogin extends Component {
 
       authenticate = (user, password) => new Promise((resolve,reject) => {
         console.log('user = ' + user + ' password =' + password)
-        fetch("https://my-helio-cart-api.herokuapp.com/user/login", {
+        fetch("http://localhost:4000/user/login", {
             method: "POST",
             headers: {"content-Type": "application/json" },
             credentials: "include",
@@ -101,7 +101,7 @@ class UserLogin extends Component {
                     :
                     null }
                     <p>Don't have an account?</p>
-                    <Link style={{textDecoration: 'none', fontWeight: 'bold', color: '#07AAFF', cursor: 'pointer'}} to='/user/createAccount'>Click here to create one</Link>
+                    <Link style={{textDecoration: 'none', fontWeight: 'bold', color: '#07AAFF', cursor: 'pointer'}} to='/user/create-account'>Click here to create one</Link>
                 </div>
             </div>
         

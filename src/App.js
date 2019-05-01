@@ -35,7 +35,7 @@ class App extends Component {
               {/* Note the use of 'exact' */}
               <Route path="/user/storefront" exact component={Storefront}/>
               <Route path="/user/login" exact component={UserLogin}/>
-              <Route path="/user/createAccount" exact component={AddUser}/>
+              <Route path="/user/create-account" exact component={AddUser}/>
             </Switch>
           </div>
         </Router>
