@@ -46,12 +46,13 @@ class AddUser extends Component {
 
     addUser = () => () => {
         this.addNewUser()
-        .then(result => this.setState({
+        .then(result => {
+            this.setState({
             addedUser: result,
             error: null
         })
-        )
-        .catch(
+    })
+        .catch( error => 
             this.setState({
             error: 'Username already taken.  Please enter a new username.'
         }))
@@ -67,9 +68,16 @@ class AddUser extends Component {
             <div>
                 <h2 style={{fontSize: 40}}>Create New Account</h2>
                     <form style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-                        <label style={{display: 'flex', flexDirection: 'row', alignSelf:'center', fontSize: 20}}>Email: <input name='newEmail' value={this.state.newEmail} style={{height: 20, width: 200}} onChange={this.handleChange}></input></label>
-                        <label style={{display: 'flex', flexDirection: 'row', alignSelf:'center', fontSize: 20}}>Username: <input name='newUser' value={this.state.newUser} style={{height: 20, width: 200}} onChange={this.handleChange}></input></label>
-                        <label style={{display: 'flex', flexDirection: 'row', alignSelf:'center', fontSize: 20}}>Password: <input name='newPassword' value={this.state.newPassword} style={{height: 20, width: 200}} onChange={this.handleChange}></input></label>
+                        <label style={{display: 'flex', flexDirection: 'row', alignSelf:'center', fontSize: 20}}>Email: 
+                            <input type="email" name='newEmail' value={this.state.newEmail} style={{height: 20, width: 200}} onChange={this.handleChange}></input>
+                        </label>
+                        <label style={{display: 'flex', flexDirection: 'row', alignSelf:'center', fontSize: 20}}>Username: 
+                            <input name='newUser' value={this.state.newUser} style={{height: 20, width: 200}} onChange={this.handleChange}></input>
+                        </label>
+                        <label style={{display: 'flex', flexDirection: 'row', alignSelf:'center', fontSize: 20}}>Password: 
+                            <input name='newPassword' value={this.state.newPassword} style={{height: 20, width: 200}} onChange={this.handleChange}></input>
+                        </label>
+                    </form>
                         <button style = {{
                             color: '#07AAFF', 
                             backgroundColor: '#282c34',
@@ -79,7 +87,6 @@ class AddUser extends Component {
                             marginTop: 10,
                             cursor: 'pointer',
                             alignSelf: 'center'}} onClick={this.addUser()} type="button">Create my account</button>
-                    </form>
                     <p style={{color: "red"}}>{this.state.error}</p>
                     <p>Already have an account?</p>
                     <Link style={{textDecoration: 'none', fontWeight: 'bold', color: '#07AAFF', cursor: 'pointer'}} to='/user/login'>Sign in here</Link>

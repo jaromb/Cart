@@ -54,7 +54,7 @@ class UserLogin extends Component {
             if (response.status===200) {
             resolve(response.json())
             }
-        }).catch(
+        }).catch((error) => 
             this.setState({
                 error: 'User and/or password is incorrect'
             })   
