@@ -162,7 +162,7 @@ class Storefront extends Component {
               justifyContent: 'center'
               }}>
             {this.state.inventory.map((item)=> (
-            <div style = {{
+            <div key={item._id} style = {{
               border: '2px solid gray',
               width: '140px',
               fontWeight: 'bold',
@@ -203,7 +203,7 @@ class Storefront extends Component {
               paddingLeft: 0
             }}>
            {this.state.cartItems.map((item, _id)=> (
-                <div style={{
+                <div key={item._id} style={{
                   display: 'flex', 
                   justifyContent: 'center',
                   alignItems: 'center'
