@@ -14,7 +14,7 @@ class App extends Component {
     user: 'guest'
   }
   async componentDidMount() {
-    const user = sessionStorage.getItem('user')
+    const user = await sessionStorage.getItem('user')
     if (user) {
     this.setState({
       user: user
