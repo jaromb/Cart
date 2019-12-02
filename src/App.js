@@ -15,17 +15,20 @@ class App extends Component {
   }
   async componentDidMount() {
     const user = sessionStorage.getItem('user')
-    user ? this.setState({
-      user: user || "guest"
+    if (user) {
+    this.setState({
+      user: user
     })    
-    :
-    null
- 
+  }
+    
  }
 
   logout = () => {
     sessionStorage.clear();
     clearCookies();
+    this.setState({
+      user: 'guest'
+    })
   }
 
   render() {
