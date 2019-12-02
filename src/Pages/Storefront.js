@@ -194,11 +194,11 @@ class Storefront extends Component {
             float: 'right',
             width: '40em'
             }}> 
-            <h2 style = {{
+            <h2 style= {{
               textDecoration: 'underline', 
               fontSize: 34}}
             >Cart</h2>
-            <ul style = {{
+            <ul style= {{
               listStyle: 'none',
               paddingLeft: 0
             }}>
