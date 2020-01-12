@@ -1,4 +1,4 @@
-export  getItems = async () => {
+export const getItems = async () => {
   try {
     const response = await fetch(
       "https://my-helio-cart-api.herokuapp.com/items",

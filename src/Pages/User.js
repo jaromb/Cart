@@ -12,13 +12,14 @@ class User extends Component {
         }}
       >
         <h2 style={{ fontSize: 40 }}>Customer Portal</h2>
-        <button style={{ width: 300, height: 50, backgroundColor: "#282c34" }}>
+        <button style={{ width: 300, height: 50, backgroundColor: "#FFA500", borderRadius: "10px" }}>
           <Link
             style={{
               textDecoration: "none",
               height: 100,
               fontSize: 35,
-              fontWeight: "bold"
+              fontWeight: "bold",
+              color: "white"
             }}
             to="/user/storefront"
           >
@@ -29,8 +30,9 @@ class User extends Component {
           style={{
             width: 300,
             height: 50,
-            backgroundColor: "#282c34",
-            marginTop: 28
+            backgroundColor: "#FFA500",
+            marginTop: 28,
+            borderRadius: "10px"
           }}
         >
           <Link
@@ -38,7 +40,8 @@ class User extends Component {
               textDecoration: "none",
               height: 100,
               fontSize: 35,
-              fontWeight: "bold"
+              fontWeight: "bold",
+              color: "white"
             }}
             to="/user/login"
           >
@@ -49,8 +52,9 @@ class User extends Component {
           style={{
             width: 300,
             height: 50,
-            backgroundColor: "#282c34",
-            marginTop: 28
+            backgroundColor: "#FFA500",
+            marginTop: 28,
+            borderRadius: "10px"
           }}
         >
           <Link
@@ -58,7 +62,8 @@ class User extends Component {
               textDecoration: "none",
               height: 100,
               fontSize: 35,
-              fontWeight: "bold"
+              fontWeight: "bold", 
+              color: "white"
             }}
             to="/user/create-account"
           >
