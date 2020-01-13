@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { PrimaryOrange, PrimaryBlue } from "../Components/Colors.js"
 
 class User extends Component {
   render() {
@@ -11,15 +12,15 @@ class User extends Component {
           alignItems: "center"
         }}
       >
-        <h2 style={{ fontSize: 40 }}>Customer Portal</h2>
-        <button style={{ width: 300, height: 50, backgroundColor: "#FFA500", borderRadius: "10px" }}>
+        <h2 style={{ fontSize: 40, color: PrimaryBlue }}>Customer Portal</h2>
+        <button style={{ width: 300, height: 50, backgroundColor: PrimaryBlue, borderRadius: "10px" }}>
           <Link
             style={{
               textDecoration: "none",
               height: 100,
               fontSize: 35,
               fontWeight: "bold",
-              color: "white"
+              color: "#white"
             }}
             to="/user/storefront"
           >
@@ -30,7 +31,7 @@ class User extends Component {
           style={{
             width: 300,
             height: 50,
-            backgroundColor: "#FFA500",
+            backgroundColor: PrimaryBlue,
             marginTop: 28,
             borderRadius: "10px"
           }}
@@ -52,7 +53,7 @@ class User extends Component {
           style={{
             width: 300,
             height: 50,
-            backgroundColor: "#FFA500",
+            backgroundColor: PrimaryBlue,
             marginTop: 28,
             borderRadius: "10px"
           }}

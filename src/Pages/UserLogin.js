@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
+import { PrimaryBlue, PrimaryOrange } from "../Components/Colors";
 
 class UserLogin extends Component {
   state = {
@@ -78,7 +79,7 @@ class UserLogin extends Component {
     ) : (
       <div>
         <div>
-          <h2 style={{ fontSize: 40 }}>Customer Login</h2>
+          <h2 style={{ fontSize: 40, color: PrimaryBlue }}>Customer Login</h2>
           <form
             style={{
               display: "flex",
@@ -91,7 +92,8 @@ class UserLogin extends Component {
                 display: "flex",
                 flexDirection: "row",
                 alignSelf: "center",
-                fontSize: 20
+                fontSize: 20,
+                color: PrimaryBlue
               }}
             >
               Email/Username:{" "}
@@ -107,7 +109,8 @@ class UserLogin extends Component {
                 display: "flex",
                 flexDirection: "row",
                 alignSelf: "center",
-                fontSize: 20
+                fontSize: 20,
+                color: PrimaryBlue
               }}
             >
               Password:{" "}
@@ -122,14 +125,16 @@ class UserLogin extends Component {
           </form>
           <button
             style={{
-              color: "#07AAFF",
+              color: "white",
               marginTop: 10,
-              backgroundColor: "#282c34",
-              height: 25,
-              width: 120,
+              backgroundColor: PrimaryBlue,
+              height: 30,
+              width: 160,
               fontWeight: "bold",
               cursor: "pointer",
-              alignSelf: "center"
+              alignSelf: "center",
+              borderRadius: "6px",
+              fontSize: "14px"
             }}
             onClick={this.authenticateUser(
               this.state.user,
@@ -141,12 +146,12 @@ class UserLogin extends Component {
           {this.state.error ? (
             <p style={{ color: "red" }}>{this.state.error}</p>
           ) : null}
-          <p>Don't have an account?</p>
+          <p style={{margin: "30px 0 10px 0", fontSize: "18px"}}>Don't have an account yet?</p>
           <Link
             style={{
               textDecoration: "none",
-              fontWeight: "bold",
-              color: "#07AAFF",
+              fontWeight: 500,
+              color: PrimaryBlue,
               cursor: "pointer"
             }}
             to="/user/create-account"

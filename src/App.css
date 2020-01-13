@@ -1,5 +1,10 @@
+
+
+
 .App {
   text-align: center;
+  background-color: white;
+  min-height: 100vh
 }
 
 .App-logo {
@@ -9,18 +14,19 @@
 }
 
 .App-header {
-  background-color: #FFA500;
+  background-color: #1b9ce5;
   min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color:#07AAFF;
+  color:#071AFF;
+  font-family: "avenir next";
 }
 
 .App-link {
-  color: #61dafb;
+  color: #F79E02;
 }
 
 @keyframes App-logo-spin {
@@ -33,15 +39,15 @@
 }
 
 a:link {
-  color: #07AAFF
+  color: white
 }
 
 a:visited {
-  color: #07AAFF
+  color: white
 }
 
 a:hover {
-  color: purple
+  color: #80d904
 }
 
 

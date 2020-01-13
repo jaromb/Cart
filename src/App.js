@@ -3,6 +3,7 @@ import Storefront from "./Pages/Storefront";
 import AddUser from "./Pages/AddUser";
 import UserLogin from "./Pages/UserLogin";
 import User from "./Pages/User";
+import GroceryBasket from "../src/Images/Grocery-basket-clipart.png"
 
 import "../src/App.css";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
@@ -28,11 +29,14 @@ class App extends Component {
                 height: 120
               }}
             >
-              <h1 style={{ fontSize: 50, fontWeight: "bold" }}>
+              <div style={{display: "flex", flexDirection: "Row", alignItems: "baseline"}}>
+                <img style={{width: "50px", height: "50px", marginRight: "8px"}} src={GroceryBasket} />
+              <h1 style={{ fontSize: 50, fontWeight: "bold", justifyContent: "center" }}>
                 <Link style={{ textDecoration: "none" }} to="/home">
                   Stuff to Eat
                 </Link>
               </h1>
+              </div>
               <ul
                 style={{
                   listStyle: "none",
