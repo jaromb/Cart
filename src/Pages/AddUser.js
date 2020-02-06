@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
+import { PrimaryButton, Row } from "../Components/StyledComponents";
+import { PrimaryBlue } from "../Components/Colors";
 
 class AddUser extends Component {
   state = {
@@ -67,7 +69,9 @@ class AddUser extends Component {
       <Redirect to="/user/login" />
     ) : (
       <div>
-        <h2 style={{ fontSize: 40 }}>Create New Account</h2>
+        <h2 style={{ fontSize: 40, color: PrimaryBlue, marginBottom: "10px" }}>
+          Create New Account
+        </h2>
         <form
           style={{
             display: "flex",
@@ -75,72 +79,62 @@ class AddUser extends Component {
             justifyContent: "center"
           }}
         >
-          <label
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignSelf: "center",
-              fontSize: 20
-            }}
-          >
-            Email:
+          <Row style={{ justifyContent: "center", marginBottom: "5px" }}>
+            <label
+              style={{
+                fontSize: 20,
+                color: PrimaryBlue,
+                width: "120px"
+              }}
+            >
+              Email:
+            </label>
             <input
               type="email"
               name="newEmail"
               value={this.state.newEmail}
-              style={{ height: 20, width: 200 }}
+              style={{ height: 20, width: 200, fontSize: 14, paddingLeft: 5 }}
               onChange={this.handleChange}
             ></input>
-          </label>
+          </Row>
+          <Row style={{justifyContent: "center", marginBottom: "5px"}}>
           <label
             style={{
-              display: "flex",
-              flexDirection: "row",
-              alignSelf: "center",
-              fontSize: 20
+              fontSize: 20,
+              color: PrimaryBlue,
+              width: "120px"
             }}
           >
             Username:
+          </label>
             <input
               name="newUser"
               value={this.state.newUser}
-              style={{ height: 20, width: 200 }}
+              style={{ height: 20, width: 200, fontSize: 14, paddingLeft: 5 }}
               onChange={this.handleChange}
             ></input>
-          </label>
+          </Row>
+          <Row style={{justifyContent: "center"}}>
           <label
             style={{
-              display: "flex",
-              flexDirection: "row",
-              alignSelf: "center",
-              fontSize: 20
+              fontSize: 20,
+              color: PrimaryBlue,
+              width: "120px"
             }}
           >
             Password:
+          </label> 
             <input
               name="newPassword"
               value={this.state.newPassword}
-              style={{ height: 20, width: 200 }}
+              style={{ height: 20, width: 200, fontSize: 14, paddingLeft: 5 }}
               onChange={this.handleChange}
             ></input>
-          </label>
+          </Row>
         </form>
-        <button
-          style={{
-            color: "#07AAFF",
-            backgroundColor: "#282c34",
-            height: 25,
-            width: 160,
-            fontWeight: "bold",
-            marginTop: 10,
-            cursor: "pointer",
-            alignSelf: "center"
-          }}
-          onClick={this.addUser()}
-          type="button"
-        >
+        <PrimaryButton onClick={this.addUser()}>
           Create my account
-        </button>
+        </PrimaryButton>
         <p style={{ color: "red" }}>{this.state.error}</p>
         <p>Already have an account?</p>
         <Link

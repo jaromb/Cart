@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { PrimaryBlue, PrimaryOrange } from "../Components/Colors";
+import { PrimaryButton, Row } from "../Components/StyledComponents"
 
 class UserLogin extends Component {
   state = {
@@ -79,7 +80,7 @@ class UserLogin extends Component {
     ) : (
       <div>
         <div>
-          <h2 style={{ fontSize: 40, color: PrimaryBlue }}>Customer Login</h2>
+          <h2 style={{ fontSize: 40, color: PrimaryBlue, marginBottom: "15px" }}>Customer Login</h2>
           <form
             style={{
               display: "flex",
@@ -87,49 +88,49 @@ class UserLogin extends Component {
               justifyContent: "center"
             }}
           >
+           <Row style={{justifyContent: "center", marginBottom: "10px"}}>
+
             <label
               style={{
-                display: "flex",
-                flexDirection: "row",
-                alignSelf: "center",
                 fontSize: 20,
-                color: PrimaryBlue
+                color: PrimaryBlue,
+                width: "180px"
               }}
             >
               Email/Username:{" "}
+            </label>
               <input
                 name="user"
                 value={this.state.user}
-                style={{ height: 20, width: 200 }}
+                style={{width: 200, paddingLeft: "5px", fontSize: 14 }}
                 onChange={this.handleChange}
               ></input>
-            </label>
+           </Row>
+           <Row style={{justifyContent: "center"}}>
             <label
               style={{
-                display: "flex",
-                flexDirection: "row",
-                alignSelf: "center",
                 fontSize: 20,
-                color: PrimaryBlue
+                color: PrimaryBlue,
+                width: "180px"
               }}
             >
               Password:{" "}
+            </label>
               <input
                 name="password"
                 type="password"
                 value={this.state.password}
-                style={{ height: 20, width: 200 }}
+                style={{ height: 20, width: 200, paddingLeft: "5px", fontSize: 14 }}
                 onChange={this.handleChange}
               ></input>
-            </label>
+           </Row>
           </form>
-          <button
+          <PrimaryButton
             style={{
-              color: "white",
               marginTop: 10,
               backgroundColor: PrimaryBlue,
-              height: 30,
-              width: 160,
+              // height: 30,
+              // width: 160,
               fontWeight: "bold",
               cursor: "pointer",
               alignSelf: "center",
@@ -142,11 +143,13 @@ class UserLogin extends Component {
             )}
           >
             Sign in
-          </button>
+          </PrimaryButton>
           {this.state.error ? (
             <p style={{ color: "red" }}>{this.state.error}</p>
           ) : null}
-          <p style={{margin: "30px 0 10px 0", fontSize: "18px"}}>Don't have an account yet?</p>
+          <p style={{ margin: "30px 0 10px 0", fontSize: "18px" }}>
+            Don't have an account yet?
+          </p>
           <Link
             style={{
               textDecoration: "none",

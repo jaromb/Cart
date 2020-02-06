@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import AddToCartButton from "../Components/AddToCart";
+import { AddToCartButton, Column, PrimaryButton } from "../Components/StyledComponents";
 import {
   getCart,
   addItemToCart,
@@ -7,6 +7,7 @@ import {
   updateItemInCart
 } from "../Components/Cart";
 import { getItems } from "../Components/GetItems";
+import { PrimaryBlue, PrimaryOrange } from "../Components/Colors";
 
 class Storefront extends Component {
   state = {
@@ -149,11 +150,14 @@ class Storefront extends Component {
     return (
       <div>
         <section style={{ display: "flex" }}>
-          <div style={{ float: "left", borderRight: "3px solid gray" }}>
+          <div style={{ float: "left", borderRight: "3px solid lightgray", margin: "0 20px" }}>
             <h2
               style={{
-                textDecoration: "underline",
-                fontSize: 34
+                fontSize: 38,
+                color: PrimaryBlue,
+                fontWeight: 700,
+                fontFamily: "avenir next",
+                margin: "15px"
               }}
             >
               Store Inventory
@@ -169,34 +173,26 @@ class Storefront extends Component {
               }}
             >
               {this.state.inventory.map(item => (
-                <div
+                <Column style={{alignItems: "center", marginBottom: "10px"}}>
+                <Column
                   key={item._id}
                   style={{
-                    border: "2px solid gray",
                     width: "140px",
-                    fontWeight: "bold",
-                    margin: 5,
-                    display: "grid",
-                    gridTemplateRows: ".5fr 2fr 1fr .5fr",
+                    margin: "5px",
                     alignItems: "center",
-                    justifyItems: "center"
+                    justifyContent: "space-between",
+                    backgroundColor: "whitesmoke",
+                    height: "190px"
                   }}
                 >
-                  <li>{item.name} </li>
+                  <li style={{fontFamily: "avenir next", fontSize: "19px", fontWeight: 600}}>{item.name} </li>
                   <img style={{ width: 120 }} src={item.image} alt="" />
-                  <p>Price = ${item.price}</p>
-                  <AddToCartButton
-                    style={{
-                      color: "#07AAFF",
-                      backgroundColor: "#282c34",
-                      height: 25,
-                      width: 140,
-                      fontWeight: "bold",
-                      cursor: "pointer"
-                    }}
-                    onClick={this.handleAddClick(item)}
-                  />
-                </div>
+                  <p style={{marginBottom: "5px"}}>Price = ${item.price}</p>
+                </Column>
+                  <AddToCartButton style={{marginTop: "0px"}} onClick={this.handleAddClick(item)}>
+                    Add To Cart
+                  </AddToCartButton>
+                </Column>
               ))}
             </ul>
           </div>
@@ -205,13 +201,17 @@ class Storefront extends Component {
           <div
             style={{
               float: "right",
-              width: "40em"
+              width: "40em",
+              margin: "0 20px 0 0"
             }}
           >
             <h2
               style={{
-                textDecoration: "underline",
-                fontSize: 34
+                fontSize: 38,
+                fontFamily: "avenir next",
+                color: PrimaryBlue,
+                margin: "15px 0",
+                textAlign: "center"
               }}
             >
               Cart
@@ -266,7 +266,7 @@ class Storefront extends Component {
                 </div>
               ))}
             </ul>
-            <h3>You have {this.state.cartItems.length} items in your cart.</h3>
+            <h3>You have <b style={{fontWeight: 800, fontSize: "22px", color: PrimaryOrange}}>{this.state.cartItems.length}</b> items in your cart.</h3>
             <h4
               style={{
                 lineHeight: 0.2,
@@ -296,19 +296,22 @@ class Storefront extends Component {
                 )
               ).toFixed(2)}
             </h3>
-            <button
+            <PrimaryButton
               style={{
-                backgroundColor: "gold",
-                border: "2px solid black",
-                fontSize: 16,
-                fontWeight: "bold",
+                backgroundColor: PrimaryBlue,
+                color: "white",
+                fontSize: "21px",
+                // border: "1px solid gray",
+                fontWeight: 700,
                 width: 120,
-                cursor: "pointer"
+                height: 60,
+                cursor: "pointer",
+                fontFamily: "avenir next"
               }}
               onClick={this.checkoutAlert}
             >
-              Complete Purchase
-            </button>
+              Finalize Order
+            </PrimaryButton>
           </div>
         </section>
       </div>

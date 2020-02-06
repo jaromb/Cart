@@ -46,7 +46,7 @@ class App extends Component {
                   flexWrap: "wrap",
                   justifyContent: "center",
                   color: "#07AAFF",
-                  fontSize: 18
+                  fontSize: 20
                 }}
               >
                 <li>
