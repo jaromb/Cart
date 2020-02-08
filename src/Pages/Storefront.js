@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { AddToCartButton, Column, PrimaryButton } from "../Components/StyledComponents";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt, faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
+import {
+  AddToCartButton,
+  Column,
+  Row,
+  PrimaryButton
+} from "../Components/StyledComponents";
 import {
   getCart,
   addItemToCart,
@@ -146,11 +153,45 @@ class Storefront extends Component {
     }
   };
 
+  handleAddInCart = item => () => {
+    let cartCopy = this.state.cartItems;
+    for (let i = 0; i < cartCopy.length; i++) {
+      if (cartCopy[i]._id === item._id) {
+        cartCopy[i].quantity += 1;
+        this.setState({
+          updateItem: cartCopy[i]
+        });
+      }
+      this.setState({
+        cartItems: cartCopy
+      });
+    }
+    updateItemInCart(this.state.updateItem).then(cart =>
+      this.setState({
+        cartItems: cart
+      })
+    );
+  };
+
+  handleTrashClick = item => () => {
+    removeItemFromCart(item._id).then(cart =>
+      this.setState({
+        cartItems: cart
+      })
+    );
+  };
+
   render() {
     return (
       <div>
-        <section style={{ display: "flex" }}>
-          <div style={{ float: "left", borderRight: "3px solid lightgray", margin: "0 20px" }}>
+        <section style={{ display: "flex"}}>
+          <div
+            style={{
+              float: "left",
+              borderRight: "3px solid lightgray",
+              margin: "0 20px"
+            }}
+          >
             <h2
               style={{
                 fontSize: 38,
@@ -173,23 +214,37 @@ class Storefront extends Component {
               }}
             >
               {this.state.inventory.map(item => (
-                <Column style={{alignItems: "center", marginBottom: "10px"}}>
-                <Column
-                  key={item._id}
-                  style={{
-                    width: "140px",
-                    margin: "5px",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    backgroundColor: "whitesmoke",
-                    height: "190px"
-                  }}
-                >
-                  <li style={{fontFamily: "avenir next", fontSize: "19px", fontWeight: 600}}>{item.name} </li>
-                  <img style={{ width: 120 }} src={item.image} alt="" />
-                  <p style={{marginBottom: "5px"}}>Price = ${item.price}</p>
-                </Column>
-                  <AddToCartButton style={{marginTop: "0px"}} onClick={this.handleAddClick(item)}>
+                <Column style={{ alignItems: "center", marginBottom: "10px" }}>
+                  <Column
+                    key={item._id}
+                    style={{
+                      width: "140px",
+                      margin: "5px",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      border: "3px solid",
+                      borderColor: PrimaryBlue,
+                      height: "190px",
+                      borderRadius: "10px",
+                      backgroundColor: "white"
+                    }}
+                  >
+                    <li
+                      style={{
+                        fontFamily: "avenir next",
+                        fontSize: "19px",
+                        fontWeight: 600
+                      }}
+                    >
+                      {item.name}{" "}
+                    </li>
+                    <img style={{ width: 120 }} src={item.image} alt="" />
+                    <p style={{ marginBottom: "5px" }}>Price = ${item.price}</p>
+                  </Column>
+                  <AddToCartButton
+                    style={{ marginTop: "0px" }}
+                    onClick={this.handleAddClick(item)}
+                  >
                     Add To Cart
                   </AddToCartButton>
                 </Column>
@@ -233,40 +288,102 @@ class Storefront extends Component {
                 >
                   <li
                     style={{
-                      paddingRight: 10,
+                      // padding: "0 10px",
                       width: 120,
-                      fontWeight: "bold",
-                      paddingTop: 10,
-                      fontSize: 22,
-                      border: "1px solid black",
-                      background: "lightblue",
-                      margin: 5,
-                      lineHeight: 1
+                      fontWeight: 640,
+                      fontSize: 20,
+                      lineHeight: 0.8,
+                      fontFamily: "avenir next"
                     }}
                   >
-                    {item.name}{" "}
-                    <p style={{ fontSize: 16, lineHeight: 0.1 }}>
-                      {item.quantity} x ${item.price}
-                    </p>
+                    <Column
+                      style={{
+                        textAlign: "center",
+                        border: "2px solid",
+                        borderColor: PrimaryBlue,
+                        padding: "0 5px 5px 5px",
+                        borderRadius: "10px",
+                        marginBottom: "8px",
+                        backgroundColor: "white"
+                      }}
+                    >
+                      <Row
+                        style={{
+                          alignItems: "center",
+                          justifyContent: "center",
+                          margin: 0
+                        }}
+                      >
+                        <img
+                          style={{
+                            maxHeight: "25px",
+                            width: "auto",
+                            paddingRight: "3px"
+                          }}
+                          src={item.image}
+                        ></img>
+                        <p>{item.name} </p>
+                      </Row>
+                      <p
+                        style={{ fontSize: 16, lineHeight: 0.1, marginTop: 0 }}
+                      >
+                        {item.quantity} x ${item.price} ea
+                      </p>
+                      <Row
+                        style={{
+                          justifyContent: "center",
+                          alignItems: "space-around",
+                          margin: "0 5px"
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          style={{
+                            color: PrimaryBlue,
+                            cursor: "pointer",
+                            marginRight: "13px",
+                            fontSize: "15px"
+                          }}
+                          onClick={this.handleAddInCart(item)}
+                        ></FontAwesomeIcon>
+                        <FontAwesomeIcon
+                          icon={faMinus}
+                          style={{
+                            color: PrimaryBlue,
+                            cursor: "pointer",
+                            marginRight: "13px",
+                            fontSize: "15px"
+                          }}
+                          onClick={this.handleDeleteClick(item)}
+                        ></FontAwesomeIcon>
+                        <FontAwesomeIcon
+                          onClick={this.handleTrashClick(item)}
+                          style={{
+                            color: PrimaryOrange,
+                            cursor: "pointer",
+                            fontSize: "15px"
+                          }}
+                          icon={faTrashAlt}
+                        ></FontAwesomeIcon>
+                      </Row>
+                    </Column>
                   </li>
-                  <button
-                    style={{
-                      color: "black",
-                      backgroundColor: "lightgray",
-                      width: 30,
-                      height: 20,
-                      border: "2px solid black",
-                      fontWeight: "bold",
-                      cursor: "pointer"
-                    }}
-                    onClick={this.handleDeleteClick(item)}
-                  >
-                    X
-                  </button>
                 </div>
               ))}
             </ul>
-            <h3>You have <b style={{fontWeight: 800, fontSize: "22px", color: PrimaryOrange}}>{this.state.cartItems.length}</b> items in your cart.</h3>
+            <h3>
+              You have{" "}
+              <b
+                style={{
+                  fontWeight: 800,
+                  fontSize: "22px",
+                  color: PrimaryOrange
+                }}
+              >
+                {this.state.cartItems.length}
+              </b>{" "}
+              items in your cart.
+            </h3>
             <h4
               style={{
                 lineHeight: 0.2,
@@ -301,12 +418,12 @@ class Storefront extends Component {
                 backgroundColor: PrimaryBlue,
                 color: "white",
                 fontSize: "21px",
-                // border: "1px solid gray",
                 fontWeight: 700,
                 width: 120,
                 height: 60,
                 cursor: "pointer",
-                fontFamily: "avenir next"
+                fontFamily: "avenir next",
+                boxShadow: "3px 3px gray"
               }}
               onClick={this.checkoutAlert}
             >
