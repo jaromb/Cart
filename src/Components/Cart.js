@@ -1,8 +1,9 @@
 export const getCart = () =>
   new Promise((resolve, reject) => {
-    const userValue = sessionStorage.getItem("user");
-    const user = { user: userValue };
-    console.log(user);
+    // const userValue = sessionStorage.getItem("user");
+    // const user = { user: userValue || null };
+    // console.log("get cart activated")
+    // console.log(user);
     fetch("https://my-helio-cart-api.herokuapp.com/unique-cart", {
       method: "GET",
       headers: { "content-Type": "application/json" },
@@ -42,12 +43,16 @@ export const removeItemFromCart = _id =>
       .catch(reject);
   });
 
-export const updateItemInCart = item =>
+export const updateItemInCart = item => 
   new Promise((resolve, reject) => {
     fetch("https://my-helio-cart-api.herokuapp.com/cart", {
       method: "PUT",
       headers: { "content-Type": "application/json" },
       body: JSON.stringify(item),
       credentials: "include"
-    });
+    })
+    .then(cart => {
+        resolve(cart.json());
+      })
+      .catch(reject);;
   });

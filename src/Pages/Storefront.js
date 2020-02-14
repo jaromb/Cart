@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import React, { Component, useState, createContext, useEffect, useReducer, useContext } from "react";
+import { AuthContext } from "../App"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt, faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -16,172 +17,182 @@ import {
 import { getItems } from "../Components/GetItems";
 import { PrimaryBlue, PrimaryOrange } from "../Components/Colors";
 
-class Storefront extends Component {
-  state = {
+function Storefront() {
+  const { state: authState } = useContext(AuthContext)
+
+  // const { state, dispatch } = useReducer(reducer, initialState)
+  const initialState = {
     inventory: [],
     cartItems: [],
     updateItem: {},
     subtotal: "",
     tax: ".067",
     user: "guest"
-  };
+  }
 
-  checkoutAlert = () => {
+  const [data, setData] = useState(initialState)
+
+  const checkoutAlert = () => {
     alert(`Are you sure you're ready to check out?`);
   };
 
-  async componentDidMount() {
+  async function getData() {
     const items = await getItems();
     const cart = await getCart();
     const user = sessionStorage.getItem("user");
-    this.setState({
+
+    setData({
+      ...data,
       inventory: items,
       cartItems: cart || [],
-      subtotal: this.calculateSubtotal(),
+      subtotal: calculateSubtotal(),
       user: user || "guest"
-    });
+    })
   }
 
-  calculateSubtotal = cart => {
+  useEffect(() => {
+    getData();
+    
+  }, [])
+
+  const calculateSubtotal = cart => {
     let sum = 0;
-    for (let i = 0; i < this.state.cartItems.length; i++) {
-      sum += this.state.cartItems[i].price * this.state.cartItems[i].quantity;
+    for (let i = 0; i < data.cartItems.length; i++) {
+      sum += data.cartItems[i].price * data.cartItems[i].quantity;
     }
     return sum.toFixed(2);
   };
 
-  subtotal = this.calculateSubtotal(this.state.cartItems);
-  addToCart = item => () => {
-    addItemToCart(item).then(cart =>
-      this.setState({
-        cartItems: cart
-      })
-    );
-  };
+  const subtotal = calculateSubtotal(data.cartItems);
 
-  updateCartItem = item => () => {
-    updateItemInCart(item).then(cart =>
-      this.setState({
-        cartItems: cart
-      })
-    );
-  };
+  // const addToCart = item => () => {
+  //   addItemToCart(item).then(cart =>
+  //     setData({
+  //       ...data,
+  //       cartItems: cart
+  //     })
+  //   );
+  // };
 
-  handleAddClick = item => () => {
+  // const updateCartItem = item => () => {
+  //   updateItemInCart(item).then(cart =>
+  //     setData({
+  //       ...data,
+  //       cartItems: cart
+  //     })
+  //   ).then(cart=> console.log(cart));
+  // };
+
+
+  const handleAddClick = item => () => {
+    let i
     if (
-      this.state.cartItems.find(
+      data.cartItems.find(
         cartItem =>
-          cartItem.itemID === item._id && cartItem.user === this.state.user
+          cartItem.itemID === item._id && cartItem.user === data.user
       ) === undefined
     ) {
-      console.log("add item");
-      // console.log("cart ID=  " + cartItem.itemID)
-      // console.log('item ID= ' + item._id)
-      // console.log('user in state= ' + this.state.user)
-      // console.log('cart user= ' + cartItem.user)
-      console.log("state user= " + this.state.user);
-      console.log("item ID= " + item._id);
       let addedItem = item;
       addedItem.quantity = 1;
       addItemToCart(addedItem).then(cart =>
-        this.setState({
+        setData({
+          ...data,
           cartItems: cart
         })
       );
     } else {
-      let cartCopy = this.state.cartItems;
+      let cartCopy = data.cartItems;
       for (let i = 0; i < cartCopy.length; i++) {
-        console.log("cart ID=  " + cartCopy[i].itemID);
-        console.log("item ID= " + item._id);
-        console.log("user in state= " + this.state.user);
-        console.log("cart user= " + cartCopy[i].user);
-
         if (
           cartCopy[i].itemID === item._id &&
-          this.state.user === cartCopy[i].user
+          data.user === cartCopy[i].user
         ) {
           cartCopy[i].quantity += 1;
-          this.setState({
-            updateItem: cartCopy[i]
-          });
+          setData({
+            ...data,
+            cartItems: cartCopy
+          })
+          updateItemInCart(cartCopy[i]).then(cart => {
+            setData({
+              ...data,
+              cartItems: cart
+            })
+          }
+          );
+         
+          
+          
         }
-        this.setState({
-          cartItems: cartCopy
-        });
       }
-      updateItemInCart(this.state.updateItem).then(cart =>
-        this.setState({
-          cartItems: cart
-        })
-      );
     }
   };
 
-  removeItem = item => () => {
-    removeItemFromCart(item._id).then(cart =>
-      this.setState({
-        cartItems: cart
-      })
-    );
-  };
+  // const removeItem = item => () => {
+  //   removeItemFromCart(item._id).then(cart =>
+  //     setData({
+  //       ...data,
+  //       cartItems: cart
+  //     })
+  //   );
+  // };
 
-  handleDeleteClick = item => () => {
+  const handleDeleteClick = item => () => {
     if (item.quantity === 1) {
       removeItemFromCart(item._id).then(cart =>
-        this.setState({
+        setData({
+          ...data,
           cartItems: cart
         })
       );
     } else {
-      let cartCopy = this.state.cartItems;
+      let cartCopy = data.cartItems;
       for (let i = 0; i < cartCopy.length; i++) {
         if (cartCopy[i]._id === item._id) {
           cartCopy[i].quantity -= 1;
-          this.setState({
-            updateItem: cartCopy[i]
-          });
+          setData({
+            ...data,
+            cartItems: cartCopy
+          })
+          updateItemInCart(cartCopy[i]).then(cart =>
+            setData({
+              ...data,
+              cartItems: cart
+            })
+          );       
         }
-        this.setState({
-          cartItems: cartCopy
-        });
       }
-      updateItemInCart(this.state.updateItem).then(cart =>
-        this.setState({
-          cartItems: cart
-        })
-      );
     }
   };
 
-  handleAddInCart = item => () => {
-    let cartCopy = this.state.cartItems;
+  const handleAddInCart = item => () => {
+    let cartCopy = data.cartItems;
     for (let i = 0; i < cartCopy.length; i++) {
       if (cartCopy[i]._id === item._id) {
         cartCopy[i].quantity += 1;
-        this.setState({
-          updateItem: cartCopy[i]
-        });
+        setData({
+          ...data,
+          cartItems: cartCopy
+        })
+        updateItemInCart(cartCopy[i]).then(cart =>
+          setData({
+            ...data,
+            cartItems: cart
+          })
+        );
       }
-      this.setState({
-        cartItems: cartCopy
-      });
     }
-    updateItemInCart(this.state.updateItem).then(cart =>
-      this.setState({
-        cartItems: cart
-      })
-    );
   };
 
-  handleTrashClick = item => () => {
+  const handleTrashClick = item => () => {
     removeItemFromCart(item._id).then(cart =>
-      this.setState({
+      setData({
+        ...data,
         cartItems: cart
       })
     );
   };
 
-  render() {
+  
     return (
       <div>
         <section style={{ display: "flex"}}>
@@ -213,7 +224,7 @@ class Storefront extends Component {
                 justifyContent: "center"
               }}
             >
-              {this.state.inventory.map(item => (
+              {data.inventory.map(item => (
                 <Column style={{ alignItems: "center", marginBottom: "10px" }}>
                   <Column
                     key={item._id}
@@ -243,7 +254,7 @@ class Storefront extends Component {
                   </Column>
                   <AddToCartButton
                     style={{ marginTop: "0px" }}
-                    onClick={this.handleAddClick(item)}
+                    onClick={handleAddClick(item)}
                   >
                     Add To Cart
                   </AddToCartButton>
@@ -277,7 +288,7 @@ class Storefront extends Component {
                 paddingLeft: 0
               }}
             >
-              {this.state.cartItems.map((item, _id) => (
+              {data.cartItems.map((item, _id) => (
                 <div
                   key={item._id}
                   style={{
@@ -344,7 +355,7 @@ class Storefront extends Component {
                             marginRight: "13px",
                             fontSize: "15px"
                           }}
-                          onClick={this.handleAddInCart(item)}
+                          onClick={handleAddInCart(item)}
                         ></FontAwesomeIcon>
                         <FontAwesomeIcon
                           icon={faMinus}
@@ -354,10 +365,10 @@ class Storefront extends Component {
                             marginRight: "13px",
                             fontSize: "15px"
                           }}
-                          onClick={this.handleDeleteClick(item)}
+                          onClick={handleDeleteClick(item)}
                         ></FontAwesomeIcon>
                         <FontAwesomeIcon
-                          onClick={this.handleTrashClick(item)}
+                          onClick={handleTrashClick(item)}
                           style={{
                             color: PrimaryOrange,
                             cursor: "pointer",
@@ -380,7 +391,7 @@ class Storefront extends Component {
                   color: PrimaryOrange
                 }}
               >
-                {this.state.cartItems.length}
+                {data.cartItems.length}
               </b>{" "}
               items in your cart.
             </h3>
@@ -393,22 +404,22 @@ class Storefront extends Component {
                 justifyContent: "center"
               }}
             >
-              Subtotal: ${this.calculateSubtotal(this.state.cartItems)}
+              Subtotal: ${calculateSubtotal(data.cartItems)}
             </h4>
             <h4 style={{ lineHeight: 0.2 }}>
               Taxes: $
               {(
-                this.state.tax * this.calculateSubtotal(this.state.cartItems)
+                data.tax * calculateSubtotal(data.cartItems)
               ).toFixed(2)}
             </h4>
             <h3 style={{ lineHeight: 0.2 }}>
               Total: $
               {(
-                Number(this.calculateSubtotal(this.state.cartItems)) +
+                Number(calculateSubtotal(data.cartItems)) +
                 Number(
                   (
-                    this.state.tax *
-                    this.calculateSubtotal(this.state.cartItems)
+                    data.tax *
+                    calculateSubtotal(data.cartItems)
                   ).toFixed(2)
                 )
               ).toFixed(2)}
@@ -425,7 +436,7 @@ class Storefront extends Component {
                 fontFamily: "avenir next",
                 boxShadow: "3px 3px gray"
               }}
-              onClick={this.checkoutAlert}
+              onClick={checkoutAlert}
             >
               Finalize Order
             </PrimaryButton>
@@ -433,6 +444,6 @@ class Storefront extends Component {
         </section>
       </div>
     );
-  }
+  
 }
 export default Storefront;
